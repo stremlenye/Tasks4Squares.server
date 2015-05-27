@@ -1,4 +1,6 @@
 #Task4Squares server
+[![Build Status](https://travis-ci.org/stremlenye/Tasks4Squares.server.svg?branch=master)](https://travis-ci.org/stremlenye/Tasks4Squares.server)
+
 Server side app based on Play Framework written on Scala. Includes auth logic and user accounts maintenance.
 
 ##Dependencies
