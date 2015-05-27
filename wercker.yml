@@ -1,7 +1,0 @@
-box: skatsuta/activator
-build:
-  steps:
-    - script:
-        name: test
-        code: |
-          activator test
