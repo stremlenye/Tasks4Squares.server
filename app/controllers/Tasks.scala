@@ -1,22 +1,18 @@
 package controllers
 
-import java.util.{Optional, UUID}
-
 import controllers.Auth.Authenticated
 import models.Task
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
-import play.api.mvc.{Result, Controller}
+import play.api.libs.json._
+import play.api.mvc.Controller
 import play.modules.reactivemongo.json.BSONFormats
 import reactivemongo.bson._
-import reactivemongo.core.commands.{Project, Match, Aggregate}
+import reactivemongo.core.commands.{Aggregate, Match, Project}
 
-import scala.collection.immutable
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 // Reactive Mongo imports
-import reactivemongo.api._
 
 // Reactive Mongo plugin, including the JSON-specialized collection
 import play.modules.reactivemongo.MongoController
