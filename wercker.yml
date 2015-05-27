@@ -1,6 +1,4 @@
-box: flurdy/activator
-services:
-  - id: mongo
+box: ericssonitte/jdk8-activator
 build:
   steps:
     - script:
