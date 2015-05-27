@@ -1,4 +1,4 @@
-box: ericssonitte/jdk8-activator
+box: skatsuta/activator
 build:
   steps:
     - script:
