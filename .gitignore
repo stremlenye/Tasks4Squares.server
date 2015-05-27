@@ -16,7 +16,9 @@ dist
 /.settings
 *.DS_Store
 .DS_Store
-**/node_modules
 **/data
 *.iml
 npm-debug.log
+**/_builds
+**/_projects
+**/_steps

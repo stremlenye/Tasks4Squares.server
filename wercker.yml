@@ -1,1 +1,9 @@
-box: mitsuse/activator@0.0.2
+box: flurdy/activator
+services:
+  - id: mongo
+build:
+  steps:
+    - script:
+        name: test
+        code: |
+          activator test
