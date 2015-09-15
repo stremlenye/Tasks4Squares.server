@@ -1,21 +1,20 @@
-name := """Task4Squares"""
+name := """t"""
 
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   jdbc,
-  anorm,
   cache,
-  ws
+  ws,
+  specs2 % Test
 )
 
-resolvers += "Typesafe repository releases" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-libraryDependencies ++= Seq(
-  "org.reactivemongo" %% "reactivemongo" % "0.10.5.0.akka23",
-  "org.reactivemongo" %% "play2-reactivemongo" % "0.10.5.0.akka23"
-)
+// Play provides two styles of routers, one expects its actions to be injected, the
+// other, legacy style, accesses its actions statically.
+routesGenerator := InjectedRoutesGenerator

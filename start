@@ -1,7 +1,0 @@
-#!/bin/sh
-
-mongod --fork --dbpath ./data --logpath ./data/mongo.log
-
-sbt run
-
-mongo scripts/shutdown_mongo.js
