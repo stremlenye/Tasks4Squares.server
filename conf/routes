@@ -1,9 +1,11 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
+# TASKS
+GET           /tasks         controllers.Tasks.list()
+POST          /tasks         controllers.Tasks.create()
+PUT           /tasks         controllers.Tasks.update()
+DELETE        /tasks         controllers.Tasks.update()
 
-# Home page
-GET     /                           controllers.Application.index
+# USERS
+POST          /users         controllers.Users.create()
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+# TOKENS
+POST          /tokens        controllers.Tokens.create()

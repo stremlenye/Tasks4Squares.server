@@ -1,4 +1,4 @@
-name := """t"""
+name := """Tasks4Squares"""
 
 version := "1.0-SNAPSHOT"
 
@@ -10,11 +10,12 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  specs2 % Test
+  specs2 % Test,
+  "org.reactivemongo" %% "reactivemongo" % "0.11.7"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
-routesGenerator := InjectedRoutesGenerator
+//routesGenerator := InjectedRoutesGenerator

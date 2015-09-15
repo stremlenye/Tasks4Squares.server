@@ -1,0 +1,6 @@
+task4squares-mongo:
+  image: mongo:3.0
+  ports:
+    - "27017:27017"
+  expose:
+    - "27017:27017"
