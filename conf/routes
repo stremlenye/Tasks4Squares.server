@@ -1,11 +1,11 @@
 # TASKS
-GET           /tasks         controllers.Tasks.list()
-POST          /tasks         controllers.Tasks.create()
-PUT           /tasks         controllers.Tasks.update()
-DELETE        /tasks         controllers.Tasks.update()
+GET           /tasks         controllers.TasksController.list
+POST          /tasks         controllers.TasksController.create
+PUT           /tasks/:id     controllers.TasksController.update(id: Int)
+DELETE        /tasks/:id     controllers.TasksController.update(id: Int)
 
 # USERS
-POST          /users         controllers.Users.create()
+POST          /signup         controllers.UsersController.create
 
 # TOKENS
-POST          /tokens        controllers.Tokens.create()
+POST          /tokens        controllers.TokensController.create

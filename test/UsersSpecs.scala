@@ -1,4 +1,4 @@
-import controllers.Users
+import controllers.UsersController
 import org.junit.runner.RunWith
 import org.specs2.mutable._
 import org.specs2.runner.JUnitRunner
@@ -10,7 +10,7 @@ import org.specs2.runner.JUnitRunner
 class UsersSpecs extends Specification {
   """Users controller""" should {
     """allow to create user""" in {
-      val usersController = new Users
+      val usersController = new UsersController
       val result = usersController.create()
     }
   }
