@@ -10,7 +10,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc._
 import stores.{TokensStore, UsersStore}
-
+import entities.Implicits.{TokenEntityLike, UserEntityLike}
 import scala.concurrent.Future
 
 /**
@@ -38,7 +38,7 @@ class TokensController @Inject() (tokensStore: TokensStore, usersStore: UsersSto
       }
       case Left(m) => Future { Left(m) }
     } map {
-      case Right(token) => Created(token)
+      case Right(token) => Created(Json.toJson(token))
       case Left(m) => InternalServerError(Json.obj("message" -> m)) // TODO: return valid error codes based on real errors
     }
   }

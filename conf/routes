@@ -5,7 +5,7 @@ PUT           /tasks/:id     controllers.TasksController.update(id: Int)
 DELETE        /tasks/:id     controllers.TasksController.update(id: Int)
 
 # USERS
-POST          /signup         controllers.UsersController.create
+POST          /signup        @controllers.UsersController.create
 
 # TOKENS
-POST          /tokens        controllers.TokensController.create
+POST          /tokens        @controllers.TokensController.create

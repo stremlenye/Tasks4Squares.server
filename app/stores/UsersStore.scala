@@ -6,6 +6,7 @@ import connection.Connection
 import entities.Entity.EntityLike
 import models.User
 import reactivemongo.bson.BSONDocument
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 

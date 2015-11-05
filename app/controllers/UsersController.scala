@@ -8,6 +8,7 @@ import play.api.libs.functional.syntax._
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import stores.UsersStore
+import entities.Implicits.UserEntityLike
 
 /**
  * Created by yankudinov on 15/09/15.
