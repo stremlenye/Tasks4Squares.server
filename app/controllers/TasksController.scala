@@ -14,7 +14,9 @@ class TasksController @Inject() (tasksStore: TasksStore) extends Controller {
 
   implicit val taskReads: Reads[Task] = (__.read[Option[String]](None) and
     (__ \ "text").read[String] and
-    (__ \ "priority").read[Int])(Task.apply _)
+    (__ \ "priority").read[Int],
+    (__ \ "owner").read[String]
+  )(Task.apply _)
 
   implicit val taskWrites: Writes[Task] = ((__ \ "id").writeNullable[String] and
     (__ \ "text").write[String] and
