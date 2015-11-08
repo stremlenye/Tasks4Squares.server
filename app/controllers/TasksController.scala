@@ -1,13 +1,16 @@
 package controllers
 
+import javax.inject.Inject
+
 import models.Task
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import stores.TasksStore
 import scala.concurrent.Future
 
-object TasksController extends Controller {
+class TasksController @Inject() (tasksStore: TasksStore) extends Controller {
 
   implicit val taskReads: Reads[Task] = (__.read[Option[String]](None) and
     (__ \ "text").read[String] and

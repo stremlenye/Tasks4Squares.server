@@ -27,16 +27,23 @@ class TokensController @Inject() (tokensStore: TokensStore, usersStore: UsersSto
     (__ \ "owner").write[String] and
     (__ \ "issuedAd").write[DateTime])(unlift(Token.unapply))
 
-  def create = Action.async(parse.json[LoginForm]) {
-    request => usersStore.find(request.body.login, request.body.password) map {
-      case Some(user) => Right(Token(UUID.randomUUID().toString, user.id.get, DateTime.now))
-      case None => Left("Login or password is incorrect")
-    } flatMap {
+  def create = Action.async(parse.json) {
+    request => (request.body.validate[LoginForm].fold(
+      s => Left("Invalid json"),
+      form => Right(form)) match {
+      case Right(form) => usersStore.find(form.login, form.password) map {
+        case Some(user) => Right(Token(UUID.randomUUID().toString, user.id.get, DateTime.now))
+        case None => Left("Login or password is incorrect")
+      }
+      case Left(m) => Future(Left(m))
+    }) flatMap {
       case Right(token) => tokensStore.create(token) map {
         case 1 => Right(token)
         case _ => Left("Unable to create token")
       }
-      case Left(m) => Future { Left(m) }
+      case Left(m) => Future {
+        Left(m)
+      }
     } map {
       case Right(token) => Created(Json.toJson(token))
       case Left(m) => InternalServerError(Json.obj("message" -> m)) // TODO: return valid error codes based on real errors
