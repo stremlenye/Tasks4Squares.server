@@ -14,12 +14,10 @@ import stores.{TokensStore, UsersStore}
 import entities.Implicits.{TokenEntityLike, UserEntityLike}
 import scala.concurrent.Future
 
-/**
- * Created by yankudinov on 15/09/15.
- */
+case class LoginForm (login: String, password: String)
+
 class TokensController @Inject() (tokensStore: TokensStore, usersStore: UsersStore) extends Controller {
 
-  case class LoginForm (login: String, password: String)
 
   implicit val loginFormReader: Reads[LoginForm] = ((__ \ 'login).read[String] and
     (__ \ 'password).read[String])(LoginForm.apply _)

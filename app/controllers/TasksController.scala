@@ -14,9 +14,9 @@ import entities.Implicits._
 
 import scala.concurrent.Future
 
-class TasksController @Inject() (tasksStore: TasksStore) extends Controller {
+case class TaskForm(text: String, priority: Int)
 
-  case class TaskForm(text: String, priority: Int)
+class TasksController @Inject() (val tasksStore: TasksStore) extends Controller {
 
   implicit val taskFormReader: Reads[TaskForm] = ((__ \ "text").read[String] and
     (__ \ "priority").read[Int])(TaskForm.apply _)

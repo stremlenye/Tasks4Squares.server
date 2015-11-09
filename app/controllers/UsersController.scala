@@ -14,12 +14,10 @@ import entities.Implicits.UserEntityLike
 
 import scala.concurrent.Future
 
-/**
- * Created by yankudinov on 15/09/15.
- */
+case class SignupForm(login: String, password: String)
+
 class UsersController @Inject() (usersStore: UsersStore) extends Controller {
 
-  case class SignupForm(login: String, password: String)
 
   implicit val signupFormReader: Reads[SignupForm] = ((__ \ 'login).read[String] and
     (__ \ 'password).read[String])(SignupForm.apply _)
