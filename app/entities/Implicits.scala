@@ -19,8 +19,10 @@ object Implicits {
   implicit object TaskEntityLike extends EntityLike[Task] {
     override implicit val writer: BSONDocumentWriter[Task] = new BSONDocumentWriter[Task] {
       override def write(t: Task): BSONDocument = BSONDocument(
+        "_id" -> t.id,
         "text" -> t.text,
-        "priority" -> t.priority
+        "priority" -> t.priority,
+        "owner" -> t.owner
       )
     }
 
@@ -28,8 +30,9 @@ object Implicits {
       override def read(bson: BSONDocument): Option[Task] = for(
         id <- bson.getAs[String]("_id");
         text <- bson.getAs[String]("text");
-        priority <- bson.getAs[Int]("priority")
-      ) yield Task(Some(id), text, priority)
+        priority <- bson.getAs[Int]("priority");
+        owner <- bson.getAs[String]("owner")
+      ) yield Task(Some(id), text, priority, owner)
     }
   }
 
@@ -54,6 +57,7 @@ object Implicits {
   implicit object UserEntityLike extends EntityLike[User] {
     override implicit val writer: BSONDocumentWriter[User] = new BSONDocumentWriter[User] {
       override def write(t: User): BSONDocument = BSONDocument(
+        "_id" -> t.id,
         "login" -> t.login,
         "password" -> t.password
       )

@@ -2,15 +2,16 @@ package controllers
 
 import javax.inject.Inject
 
+import filters.AuthenticatedAction
 import models.Task
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.mvc._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import stores.TasksStore
+import stores.{UsersStore, TokensStore, TasksStore}
 import scala.concurrent.Future
 
-class TasksController @Inject() (tasksStore: TasksStore) extends Controller {
+class TasksController @Inject() (tasksStore: TasksStore, tokensStore: TokensStore, usersStore: UsersStore) extends Controller {
 
   implicit val taskReads: Reads[Task] = (__.read[Option[String]](None) and
     (__ \ "text").read[String] and
@@ -22,25 +23,25 @@ class TasksController @Inject() (tasksStore: TasksStore) extends Controller {
     (__ \ "priority").write[Int] and
     (__ \ "owner").write[String])(unlift(Task.unapply))
 
-  def list = Action.async(request => {
+  def list = AuthenticatedAction.async(request => {
     Future {
       Ok
     }
   })
 
-  def create = Action.async(request => {
+  def create = AuthenticatedAction.async(request => {
     Future {
       Created
     }
   })
 
-  def update(id: Int) = Action.async(request => {
+  def update(id: Int) = AuthenticatedAction.async(request => {
     Future {
       Created
     }
   })
 
-  def delete(id: Int) = Action.async(request => {
+  def delete(id: Int) = AuthenticatedAction.async(request => {
     Future {
       Ok
     }
