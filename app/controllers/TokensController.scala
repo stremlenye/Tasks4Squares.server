@@ -1,11 +1,12 @@
 package controllers
 
-import java.util.UUID
 import javax.inject.Inject
 
+import filters.{UnauthenticatedRequest, AuthenticatedAction}
+import helpers.Id
 import models.Token
 import org.joda.time.DateTime
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import scala.concurrent.ExecutionContext.Implicits._
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc._
@@ -20,33 +21,24 @@ class TokensController @Inject() (tokensStore: TokensStore, usersStore: UsersSto
 
   case class LoginForm (login: String, password: String)
 
-  implicit val userReader: Reads[LoginForm] = ((__ \ 'login).read[String] and
+  implicit val loginFormReader: Reads[LoginForm] = ((__ \ 'login).read[String] and
     (__ \ 'password).read[String])(LoginForm.apply _)
 
   implicit val tokenWriter: Writes[Token] = ((__ \ "token").write[String] and
     (__ \ "owner").write[String] and
     (__ \ "issuedAd").write[DateTime])(unlift(Token.unapply))
 
-  def create = Action.async(parse.json) {
-    request => (request.body.validate[LoginForm].fold(
-      s => Left("Invalid json"),
-      form => Right(form)) match {
-      case Right(form) => usersStore.find(form.login, form.password) map {
-        case Some(user) => Right(Token(UUID.randomUUID().toString, user.id.get, DateTime.now))
-        case None => Left("Login or password is incorrect")
+  def create = AuthenticatedAction.async(parse.json[LoginForm]) {
+    case r: UnauthenticatedRequest[LoginForm] => usersStore.find(r.request.body.login, r.request.body.password) flatMap {
+      case Some(user) => {
+        val token = Token(Id.generate, user.id, DateTime.now)
+        tokensStore.create(token) map {
+          case 1 => Created(Json.toJson(token))
+          case 0 => InternalServerError(Json.obj("message" -> "Unable to login"))
+        }
       }
-      case Left(m) => Future(Left(m))
-    }) flatMap {
-      case Right(token) => tokensStore.create(token) map {
-        case 1 => Right(token)
-        case _ => Left("Unable to create token")
-      }
-      case Left(m) => Future {
-        Left(m)
-      }
-    } map {
-      case Right(token) => Created(Json.toJson(token))
-      case Left(m) => InternalServerError(Json.obj("message" -> m)) // TODO: return valid error codes based on real errors
+      case None => Future(BadRequest(Json.obj("message" -> "No such user")))
     }
+    case _ => Future(Unauthorized)
   }
 }

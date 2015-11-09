@@ -1,8 +1,8 @@
 # TASKS
 GET           /tasks         @controllers.TasksController.list
 POST          /tasks         @controllers.TasksController.create
-PUT           /tasks/:id     @controllers.TasksController.update(id: Int)
-DELETE        /tasks/:id     @controllers.TasksController.update(id: Int)
+PUT           /tasks/:id     @controllers.TasksController.update(id)
+DELETE        /tasks/:id     @controllers.TasksController.update(id)
 
 # USERS
 POST          /signup        @controllers.UsersController.create

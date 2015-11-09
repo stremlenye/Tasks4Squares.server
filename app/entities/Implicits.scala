@@ -32,7 +32,7 @@ object Implicits {
         text <- bson.getAs[String]("text");
         priority <- bson.getAs[Int]("priority");
         owner <- bson.getAs[String]("owner")
-      ) yield Task(Some(id), text, priority, owner)
+      ) yield Task(id, text, priority, owner)
     }
   }
 
@@ -66,7 +66,7 @@ object Implicits {
       override def read(bson: BSONDocument): Option[User] = for (
         id <- bson.getAs[String]("_id");
         login <- bson.getAs[String]("login")
-      ) yield User(Some(id), login, None)
+      ) yield User(id, login, None)
     }
   }
 

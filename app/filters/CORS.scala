@@ -5,7 +5,7 @@ import play.api.mvc.Results._
 import play.api.mvc.{Result, RequestHeader, Filter}
 
 import scala.concurrent.Future
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import scala.concurrent.ExecutionContext.Implicits._
 
 object CORS extends Filter {
   def apply(next: (RequestHeader) => Future[Result])(request: RequestHeader): Future[Result] = {

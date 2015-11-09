@@ -24,4 +24,9 @@ class UsersStore @Inject() (conn: Connection) extends CommonStore[User](conn.db)
     implicit val reader = el.reader
     collection.find(BSONDocument("login" -> login, "password" -> password)).one[Option[User]].map(_.getOrElse(None))
   }
+
+  def find(login: String)(implicit el: EntityLike[User]): Future[Option[User]] = {
+    implicit val reader = el.reader
+    collection.find(BSONDocument("login" -> login)).one[Option[User]].map(_.getOrElse(None))
+  }
 }
