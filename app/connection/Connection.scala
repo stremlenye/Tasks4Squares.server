@@ -1,23 +1,21 @@
 package connection
 
-
-
-import javax.inject.Singleton
-
-import play.Play._
-import reactivemongo.api.MongoConnection.ParsedURI
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import reactivemongo.api.{DefaultDB, MongoConnection, MongoDriver}
+
+import scala.util.Try
 
 /**
   * Created by stremlenye on 05/11/15.
   */
-@Singleton
-class Connection {
-  val db: DefaultDB = MongoConnection.parseURI(Configuration.mongoDbUri) map {
+trait Connection {
+
+  val mongoDbUri: String
+  val mongoDefaultDb: String
+
+  implicit lazy val db: Try[DefaultDB] = MongoConnection.parseURI(mongoDbUri) map {
     parsedUri => (new MongoDriver)
       .connection(parsedUri)
-      .db(parsedUri.db.getOrElse(Configuration.mongoDefaultDb))
-  } get
+      .db(parsedUri.db.getOrElse(mongoDefaultDb))
+  }
 }

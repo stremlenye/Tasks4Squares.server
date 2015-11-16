@@ -1,8 +1,10 @@
 package filters
 
-import connection.Connection
+import connection.{Configuration, Connection}
 import entities.Implicits._
 import models.User
+import play.api.libs.json.Json
+import play.api.mvc.Results.Status
 import scala.concurrent.ExecutionContext.Implicits._
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
@@ -17,24 +19,25 @@ case class UnauthenticatedRequest[A] (request: Request[A]) extends CommonRequest
 /**
   * Created by stremlenye on 08/11/15.
   */
-object AuthenticatedAction extends ActionBuilder[CommonRequest] {
+object AuthenticatedAction extends ActionBuilder[CommonRequest] with Connection
+  with ConnectionApply with OnFailure {
 
-  private val connection = new Connection
-
-  val usersStore = new UsersStore(connection)
-  val tokensStore = new TokensStore(connection)
+  override val mongoDbUri: String = Configuration.mongoDbUri()
+  override val mongoDefaultDb: String = Configuration.mongoDefaultDb()
 
   override def invokeBlock[A](request: Request[A],
-                              block: (CommonRequest[A]) => Future[Result]): Future[Result] ={
-    def fetchUserData(token: String): Future[Option[User]] =
-      tokensStore.fetch(token).flatMap {
-        case Some(token) => usersStore.fetch(token.owner)
+                              block: (CommonRequest[A]) => Future[Result]): Future[Result] =
+  applyConnection(db => {
+    def fetchUserData(token: String): Future[Option[User]] = TokensStore(db).fetch(token).flatMap {
+        case Some(token) => UsersStore(db).fetch(token.owner)
         case _ => Future(None)
       }
-    request.headers.get(HeaderNames.AUTHORIZATION).map(fetchUserData _).map(_ map {
-      case Some(user) => AuthenticatedRequest(user, request)
-      case _ => UnauthenticatedRequest(request)
-    }).map(_ flatMap (r => block(r))).get
-  }
-
+   (request.headers.get(HeaderNames.AUTHORIZATION).map(fetchUserData _) match {
+      case Some(v) => v
+      case None => Future(None)
+    }) map {
+     case Some(user) => AuthenticatedRequest(user, request)
+     case None => UnauthenticatedRequest(request)
+   } flatMap(r => block(r))
+  })
 }

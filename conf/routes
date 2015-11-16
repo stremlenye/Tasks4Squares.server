@@ -1,11 +1,11 @@
 # TASKS
-GET           /tasks         @controllers.TasksController.list
-POST          /tasks         @controllers.TasksController.create
-PUT           /tasks/:id     @controllers.TasksController.update(id)
-DELETE        /tasks/:id     @controllers.TasksController.update(id)
+GET           /tasks         controllers.TasksController.list
+POST          /tasks         controllers.TasksController.create
+PUT           /tasks/:id     controllers.TasksController.update(id)
+DELETE        /tasks/:id     controllers.TasksController.update(id)
 
 # USERS
-POST          /signup        @controllers.UsersController.create
+POST          /signup        controllers.UsersController.create
 
 # TOKENS
-POST          /tokens        @controllers.TokensController.create
+POST          /tokens        controllers.TokensController.create

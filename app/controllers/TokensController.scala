@@ -1,8 +1,7 @@
 package controllers
 
-import javax.inject.Inject
-
-import filters.{UnauthenticatedRequest, AuthenticatedAction}
+import connection.{Configuration, Connection}
+import filters.{OnFailure, ConnectionApply, UnauthenticatedRequest, AuthenticatedAction}
 import helpers.Id
 import models.Token
 import org.joda.time.DateTime
@@ -16,8 +15,10 @@ import scala.concurrent.Future
 
 case class LoginForm (login: String, password: String)
 
-class TokensController @Inject() (tokensStore: TokensStore, usersStore: UsersStore) extends Controller {
+class TokensController extends Controller with Connection with ConnectionApply with OnFailure {
 
+  override val mongoDbUri: String = Configuration.mongoDbUri()
+  override val mongoDefaultDb: String = Configuration.mongoDefaultDb()
 
   implicit val loginFormReader: Reads[LoginForm] = ((__ \ 'login).read[String] and
     (__ \ 'password).read[String])(LoginForm.apply _)
@@ -27,16 +28,17 @@ class TokensController @Inject() (tokensStore: TokensStore, usersStore: UsersSto
     (__ \ "issuedAd").write[DateTime])(unlift(Token.unapply))
 
   def create = AuthenticatedAction.async(parse.json[LoginForm]) {
-    case r: UnauthenticatedRequest[LoginForm] => usersStore.find(r.request.body.login, r.request.body.password) flatMap {
+    case r: UnauthenticatedRequest[LoginForm] => applyConnection(db => UsersStore(db)
+      .find(r.request.body.login, r.request.body.password) flatMap {
       case Some(user) => {
         val token = Token(Id.generate, user.id, DateTime.now)
-        tokensStore.create(token) map {
+        TokensStore(db).create(token) map {
           case 1 => Created(Json.toJson(token))
           case 0 => InternalServerError(Json.obj("message" -> "Unable to login"))
         }
       }
       case None => Future(BadRequest(Json.obj("message" -> "No such user")))
-    }
+    })
     case _ => Future(Unauthorized)
   }
 }
