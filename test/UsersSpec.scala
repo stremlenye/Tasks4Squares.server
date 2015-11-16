@@ -3,6 +3,7 @@
   */
 
 import com.github.agourlay.cornichon.CornichonFeature
+import org.joda.time.DateTime
 import play.api.test.{FakeApplication, TestServer}
 
 class UsersSpec extends CornichonFeature {
@@ -55,7 +56,7 @@ class UsersSpec extends CornichonFeature {
       FakeApplication(
         additionalConfiguration = Map(
           "mongodb.uri" -> "mongodb://localhost:27017",
-          "mongodb.db" -> "tasks"
+          "mongodb.db" -> ("tasks_" + DateTime.now().getMillis.toString)
         ))
     server = new TestServer(port, app)
     server.start
