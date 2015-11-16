@@ -19,6 +19,28 @@ class UsersSpec extends CornichonFeature {
           """
         )
         Then assert status_is(201)
+        And assert body_is(whiteList = true, expected =
+          """
+          {
+            "login": "test"
+          }
+          """)
+
+        When I POST("/signup", payload =
+          """
+          {
+            "login": "test",
+            "password": "any other password"
+          }
+          """
+        )
+        Then assert status_is(400)
+        And assert body_is(
+          """
+           {
+             "message": "User with name given already exists"
+           }
+          """)
       }
     }
 
