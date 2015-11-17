@@ -41,6 +41,21 @@ class TokensSpec extends CornichonFeature {
               "owner": "<owner>"
             }
           """)
+
+        When I POST("/tokens", payload =
+          """
+            {
+              "login": "test1",
+              "password": "wrong_password"
+            }
+          """)
+        Then assert status_is(400)
+        And assert body_is(
+          """
+            {
+              "message": "No such user"
+            }
+          """)
       }
     }
 
