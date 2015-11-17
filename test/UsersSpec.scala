@@ -55,7 +55,7 @@ class UsersSpec extends CornichonFeature {
     val app: FakeApplication =
       FakeApplication(
         additionalConfiguration = Map(
-          "mongodb.uri" -> "mongodb://localhost:27017",
+          "mongodb.uri" -> "mongodb://127.0.0.1:27017",
           "mongodb.db" -> ("tasks_" + DateTime.now().getMillis.toString)
         ))
     server = new TestServer(port, app)
