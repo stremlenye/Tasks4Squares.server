@@ -1,4 +1,4 @@
-sudo: required
+#sudo: required
 language: scala
 jdk:
   - oraclejdk8
@@ -7,4 +7,4 @@ scala:
 services:
   - mongodb
 before_script:
-  - sleep 1000
+  - service mongod status
