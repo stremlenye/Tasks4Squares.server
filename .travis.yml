@@ -6,3 +6,6 @@ scala:
   - 2.11.7
 services:
   - mongodb
+script:
+  - sbt ++2.11.7 testOnly UsersSpec
+  - sbt ++2.11.7 testOnly TokensSpec

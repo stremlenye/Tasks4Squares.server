@@ -1,19 +1,20 @@
 import com.github.agourlay.cornichon.CornichonFeature
 import com.github.agourlay.cornichon.core.FeatureDef
 import helpers.TestServerInstance
+import scala.concurrent.duration._
 
 /**
   * Created by stremlenye on 17/11/15.
   */
-class TokenSpec extends CornichonFeature {
+class TokensSpec extends CornichonFeature {
   override def feature: FeatureDef =
     Feature("Signin") {
       Scenario("Simple signin") { implicit b ⇒
         When I POST("/signup", payload =
           """
           {
-            "login": "test",
-            "password": "test"
+            "login": "test1",
+            "password": "test1"
           }
           """
         )
@@ -21,7 +22,7 @@ class TokenSpec extends CornichonFeature {
         And assert body_is(whiteList = true, expected =
           """
           {
-            "login": "test"
+            "login": "test1"
           }
           """)
         And I save_from_body(_ \ "id", "owner")
@@ -29,8 +30,8 @@ class TokenSpec extends CornichonFeature {
         When I POST("/tokens", payload =
           """
             {
-              "login": "test",
-              "password": "test"
+              "login": "test1",
+              "password": "test1"
             }
           """)
         Then assert status_is(201)
@@ -43,9 +44,9 @@ class TokenSpec extends CornichonFeature {
       }
     }
 
-  lazy val port = 9000
+  override lazy val baseUrl = s"http://localhost:${TestServerInstance.port}"
 
-  override lazy val baseUrl = s"http://localhost:$port"
+  override lazy val requestTimeout = 10 seconds
 
   beforeFeature {
     TestServerInstance.start

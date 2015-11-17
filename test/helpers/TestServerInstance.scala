@@ -13,10 +13,23 @@ object TestServerInstance {
         "mongodb.uri" -> "mongodb://127.0.0.1:27017",
         "mongodb.db" -> ("tasks_" + DateTime.now().getMillis.toString)
       ))
-  private val server = new TestServer(9000, app)
+  private var server: TestServer = _
 
-  def start(): Unit = server.start()
+  val port = 9000
 
-  def stop(): Unit = server.stop()
+  def start(): Unit = {
+    if(server == null) {
+      server = new TestServer(port, app)
+      server.start()
+    }
+  }
+
+  def stop(): Unit = {
+    val serverToStop = server
+    server = null
+    if(serverToStop != null) {
+      serverToStop.stop()
+    }
+  }
 
 }

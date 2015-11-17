@@ -4,8 +4,7 @@
 
 import com.github.agourlay.cornichon.CornichonFeature
 import helpers.TestServerInstance
-import org.joda.time.DateTime
-import play.api.test.{FakeApplication, TestServer}
+import scala.concurrent.duration._
 
 class UsersSpec extends CornichonFeature {
 
@@ -48,7 +47,9 @@ class UsersSpec extends CornichonFeature {
 
   lazy val port = 9000
 
-  override lazy val baseUrl = s"http://localhost:$port"
+  override lazy val baseUrl = s"http://localhost:${TestServerInstance.port}"
+
+  override lazy val requestTimeout = 10 seconds
 
   beforeFeature {
     TestServerInstance.start
