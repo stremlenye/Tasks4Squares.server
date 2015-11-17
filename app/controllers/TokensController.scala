@@ -25,7 +25,7 @@ class TokensController extends Controller with Connection with ConnectionApply w
 
   implicit val tokenWriter: Writes[Token] = ((__ \ "token").write[String] and
     (__ \ "owner").write[String] and
-    (__ \ "issuedAd").write[DateTime])(unlift(Token.unapply))
+    (__ \ "issuedAt").write[DateTime])(unlift(Token.unapply))
 
   def create = AuthenticatedAction.async(parse.json[LoginForm]) {
     case r: UnauthenticatedRequest[LoginForm] => applyConnection(db => UsersStore(db)

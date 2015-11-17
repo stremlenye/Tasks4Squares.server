@@ -1,17 +1,14 @@
-/**
-  * Created by stremlenye on 12/11/15.
-  */
-
 import com.github.agourlay.cornichon.CornichonFeature
+import com.github.agourlay.cornichon.core.FeatureDef
 import helpers.TestServerInstance
-import org.joda.time.DateTime
-import play.api.test.{FakeApplication, TestServer}
 
-class UsersSpec extends CornichonFeature {
-
-  def feature =
-    Feature("Signup") {
-      Scenario("First signup") { implicit b ⇒
+/**
+  * Created by stremlenye on 17/11/15.
+  */
+class TokenSpec extends CornichonFeature {
+  override def feature: FeatureDef =
+    Feature("Signin") {
+      Scenario("Simple signin") { implicit b ⇒
         When I POST("/signup", payload =
           """
           {
@@ -27,21 +24,21 @@ class UsersSpec extends CornichonFeature {
             "login": "test"
           }
           """)
+        And I save_from_body(_ \ "id", "owner")
 
-        When I POST("/signup", payload =
+        When I POST("/tokens", payload =
           """
-          {
-            "login": "test",
-            "password": "any other password"
-          }
+            {
+              "login": "test",
+              "password": "test"
+            }
+          """)
+        Then assert status_is(201)
+        And assert body_is(whiteList = true,
           """
-        )
-        Then assert status_is(400)
-        And assert body_is(
-          """
-           {
-             "message": "User with name given already exists"
-           }
+            {
+              "owner": "<owner>"
+            }
           """)
       }
     }
@@ -58,4 +55,3 @@ class UsersSpec extends CornichonFeature {
     TestServerInstance.stop
   }
 }
-

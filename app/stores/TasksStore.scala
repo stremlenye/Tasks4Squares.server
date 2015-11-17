@@ -1,6 +1,5 @@
 package stores
 
-import connection.Connection
 import entities.Entity.EntityLike
 import models.Task
 import reactivemongo.api.DefaultDB
