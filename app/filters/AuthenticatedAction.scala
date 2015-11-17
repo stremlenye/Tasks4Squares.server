@@ -3,13 +3,11 @@ package filters
 import connection.{Configuration, Connection}
 import entities.Implicits._
 import models.User
-import play.api.libs.json.Json
-import play.api.mvc.Results.Status
-import scala.concurrent.ExecutionContext.Implicits._
 import play.api.mvc._
 import play.mvc.Http.HeaderNames
 import stores.{TokensStore, UsersStore}
 
+import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Future
 
 abstract class CommonRequest[A]

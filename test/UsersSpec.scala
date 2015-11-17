@@ -45,8 +45,6 @@ class UsersSpec extends CornichonFeature {
       }
     }
 
-  lazy val port = 9000
-
   override lazy val baseUrl = s"http://localhost:${TestServerInstance.port}"
 
   override lazy val requestTimeout = 10 seconds
