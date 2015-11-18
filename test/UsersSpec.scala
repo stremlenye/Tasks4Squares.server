@@ -38,9 +38,9 @@ class UsersSpec extends CornichonFeature {
         Then assert status_is(400)
         And assert body_is(
           """
-           {
-             "message": "User with name given already exists"
-           }
+          {
+            "message": "User with name given already exists"
+          }
           """)
       }
     }
@@ -51,10 +51,6 @@ class UsersSpec extends CornichonFeature {
 
   beforeFeature {
     TestServerInstance.start
-  }
-
-  afterFeature {
-    TestServerInstance.stop
   }
 }
 

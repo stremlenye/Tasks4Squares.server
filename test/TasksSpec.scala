@@ -70,9 +70,4 @@ class TasksSpec extends CornichonFeature {
   beforeFeature {
     TestServerInstance.start
   }
-
-  afterFeature {
-    TestServerInstance.stop
-  }
-
 }

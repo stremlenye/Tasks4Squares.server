@@ -66,8 +66,4 @@ class TokensSpec extends CornichonFeature {
   beforeFeature {
     TestServerInstance.start
   }
-
-  afterFeature {
-    TestServerInstance.stop
-  }
 }
