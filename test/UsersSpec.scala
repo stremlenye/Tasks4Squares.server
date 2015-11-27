@@ -9,8 +9,8 @@ import scala.concurrent.duration._
 class UsersSpec extends CornichonFeature {
 
   def feature =
-    Feature("Signup") {
-      Scenario("First signup") { implicit b ⇒
+    Feature("Signup") { implicit scenarioBuilder =>
+      Scenario("First signup") { implicit stepBuilder =>
         When I POST("/signup", payload =
           """
           {

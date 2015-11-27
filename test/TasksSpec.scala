@@ -8,8 +8,8 @@ import scala.concurrent.duration._
   */
 class TasksSpec extends CornichonFeature {
 
-  override def feature: FeatureDef = Feature("Tasks"){
-    Scenario("work with task") { implicit b =>
+  override def feature: FeatureDef = Feature("Tasks") { implicit scenarioBuilder =>
+    Scenario("work with task") { implicit stepBuilder =>
       When I POST("/signup", payload =
         """
           {
@@ -26,7 +26,6 @@ class TasksSpec extends CornichonFeature {
           }
         """)
       And I save_from_body(_ \ "id", "owner")
-
       When I POST("/tokens", payload =
         """
             {
@@ -41,6 +40,7 @@ class TasksSpec extends CornichonFeature {
               "owner": "<owner>"
             }
         """)
+      And debug show_last_response_body
       And I save_from_body(_ \ "token", "token")
       And debug show_last_response_body
 
@@ -57,7 +57,7 @@ class TasksSpec extends CornichonFeature {
           {
             "text": "test task",
             "priority": 1,
-            "owner": "<owner">
+            "owner": "<owner>"
           }
         """)
     }

@@ -8,8 +8,8 @@ import scala.concurrent.duration._
   */
 class TokensSpec extends CornichonFeature {
   override def feature: FeatureDef =
-    Feature("Signin") {
-      Scenario("Simple signin") { implicit b ⇒
+    Feature("Signin") { implicit scenarioBuilder =>
+      Scenario("Simple signin") { implicit stepBuilder =>
         When I POST("/signup", payload =
           """
           {

@@ -4,7 +4,7 @@ import connection.Connection
 import entities.Entity.EntityLike
 import models.User
 import reactivemongo.api.DefaultDB
-import reactivemongo.bson.BSONDocument
+import reactivemongo.bson.{BSONObjectID, BSONDocument}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
@@ -15,7 +15,7 @@ import scala.concurrent.Future
 class UsersStore (db: DefaultDB) extends CommonStore[User](db) with Fetchable[User, String]
   with Creatable[User] {
 
-  override def identifier(id: String): BSONDocument = BSONDocument("_id" -> id)
+  override def identifier(id: String): BSONDocument = BSONDocument("_id" -> BSONObjectID.parse(id).get) //TODO fix it
 
   override val name: String = "users"
 
