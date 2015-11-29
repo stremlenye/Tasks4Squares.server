@@ -10,7 +10,8 @@ import reactivemongo.bson.{BSONDateTime, BSONDocument, BSONString}
 class TokenEntityLikeSpec extends Specification {
 
   def is = s2"""
-      |TokenEntityLikeSpec should read BSONDocument $read
+      |TokenEntityLikeSpec should read BSONDocument to Token $read
+      |TokenEntityLikeSpec should read empty BSONDocument to None $readEmpty
       |TokenEntityLikeSpec should write BSONDocument $write
     """.stripMargin
 
@@ -18,6 +19,12 @@ class TokenEntityLikeSpec extends Specification {
     val doc = BSONDocument("token" -> "blah", "owner" -> "owner", "issuedAt" -> BSONDateTime(1000))
     val token = TokenEntityLike.reader.read(doc)
     token must beSome(Token("blah", "owner", new DateTime(1000)))
+  }
+
+  def readEmpty = {
+    val doc = BSONDocument()
+    val token = TokenEntityLike.reader.read(doc)
+    token must beNone
   }
 
   def write = {
